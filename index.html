@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickPad - Your Digital Notepad</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'beige': {
+                            50: '#fefdf8',
+                            100: '#fdf8e8',
+                            200: '#faf0c8',
+                            300: '#f5e4a3',
+                            400: '#eed376',
+                            500: '#e6c256',
+                            600: '#d4a940',
+                            700: '#b18935',
+                            800: '#8f6f32',
+                            900: '#755b2b'
+                        },
+                        'brown': {
+                            50: '#fdf8f6',
+                            100: '#f2e8e5',
+                            200: '#eaddd7',
+                            300: '#e0cec7',
+                            400: '#d2bab0',
+                            500: '#bfa094',
+                            600: '#a18072',
+                            700: '#977669',
+                            800: '#846358',
+                            900: '#43302b'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-beige-50 text-brown-900 font-sans">
+    <nav class="bg-brown-800 text-beige-50 shadow-lg">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                    <h1 class="text-2xl font-bold">📝 QuickPad</h1>
+                    <span class="hidden md:block text-beige-200 text-sm">Your Digital Notepad & Clipboard</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="themeToggle" class="bg-brown-700 hover:bg-brown-600 px-3 py-2 text-sm transition-colors duration-200">
+                        🌙 Dark Mode
+                    </button>
+                    <div class="hidden md:flex space-x-2">
+                        <span class="text-beige-200 text-sm">Last saved:</span>
+                        <span id="lastSaved" class="text-beige-100 text-sm">Never</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-6">
+        <div class="flex flex-col lg:flex-row gap-6">
+            
+            <aside class="lg:w-1/4 w-full">
+                <div class="bg-beige-100 border-2 border-brown-300 p-4">
+                    <h2 class="text-lg font-semibold mb-4 text-brown-800">📁 Note Categories</h2>
+                    <div class="space-y-2">
+                        <button class="category-btn w-full text-left px-3 py-2 bg-brown-200 hover:bg-brown-300 text-brown-800 transition-colors duration-200 active" data-category="general">
+                            📄 General Notes
+                        </button>
+                        <button class="category-btn w-full text-left px-3 py-2 bg-beige-200 hover:bg-brown-300 text-brown-800 transition-colors duration-200" data-category="code">
+                            💻 Code Snippets
+                        </button>
+                        <button class="category-btn w-full text-left px-3 py-2 bg-beige-200 hover:bg-brown-300 text-brown-800 transition-colors duration-200" data-category="todo">
+                            ✅ To-Do Lists
+                        </button>
+                        <button class="category-btn w-full text-left px-3 py-2 bg-beige-200 hover:bg-brown-300 text-brown-800 transition-colors duration-200" data-category="links">
+                            🔗 Links & URLs
+                        </button>
+                    </div>
+
+                    <div class="mt-6 p-3 bg-brown-100 border border-brown-300">
+                        <h3 class="font-semibold text-brown-800 mb-2">📊 Quick Stats</h3>
+                        <div class="text-sm text-brown-700 space-y-1">
+                            <div>Characters: <span id="charCount">0</span></div>
+                            <div>Words: <span id="wordCount">0</span></div>
+                            <div>Lines: <span id="lineCount">1</span></div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6">
+                        <h3 class="font-semibold text-brown-800 mb-3">💾 Saved Notes</h3>
+                        <div id="savedNotesList" class="space-y-2 max-h-48 overflow-y-auto">
+                            <div class="text-sm text-brown-600 italic">No saved notes yet</div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <main class="lg:w-3/4 w-full">
+                <div class="bg-beige-100 border-2 border-brown-300 p-4">
+                    
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <button id="copyBtn" class="bg-brown-600 hover:bg-brown-700 text-beige-50 px-4 py-2 text-sm transition-colors duration-200">
+                            📋 Copy All
+                        </button>
+                        <button id="pasteBtn" class="bg-brown-600 hover:bg-brown-700 text-beige-50 px-4 py-2 text-sm transition-colors duration-200">
+                            📥 Paste
+                        </button>
+                        <button id="clearBtn" class="bg-brown-500 hover:bg-brown-600 text-beige-50 px-4 py-2 text-sm transition-colors duration-200">
+                            🗑️ Clear
+                        </button>
+                        <button id="saveBtn" class="bg-brown-700 hover:bg-brown-800 text-beige-50 px-4 py-2 text-sm transition-colors duration-200">
+                            💾 Save Note
+                        </button>
+                        <button id="exportBtn" class="bg-brown-500 hover:bg-brown-600 text-beige-50 px-4 py-2 text-sm transition-colors duration-200">
+                            📤 Export
+                        </button>
+                    </div>
+
+                    <div class="mb-3">
+                        <span class="text-brown-700 text-sm font-medium">Current Category: </span>
+                        <span id="currentCategory" class="text-brown-800 font-semibold">📄 General Notes</span>
+                    </div>
+
+                    <div class="relative">
+                        <textarea 
+                            id="mainTextarea" 
+                            placeholder="Start typing your notes here... This is your digital notepad where you can store any text, code snippets, links, or ideas. Your content will be automatically saved locally."
+                            class="w-full h-96 p-4 border-2 border-brown-300 bg-beige-50 text-brown-900 placeholder-brown-500 focus:border-brown-500 focus:outline-none resize-none font-mono text-sm leading-relaxed"
+                        ></textarea>
+                        <div class="absolute bottom-2 right-2 text-xs text-brown-500 bg-beige-100 px-2 py-1 border border-brown-200">
+                            Click here to focus
+                        </div>
+                    </div>
+
+                    <div class="mt-4 flex flex-wrap gap-2">
+                        <button id="upperCaseBtn" class="bg-beige-200 hover:bg-beige-300 text-brown-800 px-3 py-1 text-sm border border-brown-300 transition-colors duration-200">
+                            ABC UPPER
+                        </button>
+                        <button id="lowerCaseBtn" class="bg-beige-200 hover:bg-beige-300 text-brown-800 px-3 py-1 text-sm border border-brown-300 transition-colors duration-200">
+                            abc lower
+                        </button>
+                        <button id="titleCaseBtn" class="bg-beige-200 hover:bg-beige-300 text-brown-800 px-3 py-1 text-sm border border-brown-300 transition-colors duration-200">
+                            Title Case
+                        </button>
+                        <button id="timestampBtn" class="bg-beige-200 hover:bg-beige-300 text-brown-800 px-3 py-1 text-sm border border-brown-300 transition-colors duration-200">
+                            📅 Add Timestamp
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mt-6 bg-brown-100 border-2 border-brown-300 p-4">
+                    <h3 class="font-semibold text-brown-800 mb-3">💡 Tips & Shortcuts</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-brown-700">
+                        <div>
+                            <strong>Keyboard Shortcuts:</strong>
+                            <ul class="mt-1 space-y-1">
+                                <li>• Ctrl+A: Select all text</li>
+                                <li>• Ctrl+C: Copy selected text</li>
+                                <li>• Ctrl+V: Paste from clipboard</li>
+                                <li>• Ctrl+S: Save current note</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <strong>Features:</strong>
+                            <ul class="mt-1 space-y-1">
+                                <li>• Auto-save every 30 seconds</li>
+                                <li>• Category-based organization</li>
+                                <li>• Export notes as text files</li>
+                                <li>• Real-time character counting</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <footer class="bg-brown-800 text-beige-50 mt-12">
+        <div class="container mx-auto px-4 py-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                    <h4 class="font-semibold mb-3">About QuickPad</h4>
+                    <p class="text-beige-200 text-sm">
+                        A simple, fast, and reliable digital notepad for all your text storage needs. 
+                        Perfect for quick notes, code snippets, and temporary clipboard storage.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-3">Features</h4>
+                    <ul class="text-beige-200 text-sm space-y-1">
+                        <li>• Responsive design for all devices</li>
+                        <li>• Local storage for persistence</li>
+                        <li>• Multiple note categories</li>
+                        <li>• Export functionality</li>
+                        <li>• Real-time text statistics</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-3">Privacy & Storage</h4>
+                    <p class="text-beige-200 text-sm">
+                        All your notes are stored locally in your browser. 
+                        No data is sent to external servers, ensuring complete privacy and security.
+                    </p>
+                    <div class="mt-3 text-xs text-beige-300">
+                        <div>Storage used: <span id="storageUsed">0 KB</span></div>
+                        <div>Notes saved: <span id="totalNotes">0</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-brown-700 mt-6 pt-4 text-center text-beige-300 text-sm">
+                <p>QuickPad - Made with love.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

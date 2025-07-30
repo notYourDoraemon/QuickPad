@@ -1,0 +1,163 @@
+html {
+    scroll-behavior: smooth;
+}
+
+#mainTextarea:focus {
+    animation: focusGlow 0.3s ease-in-out;
+}
+
+@keyframes focusGlow {
+    0% {
+        box-shadow: 0 0 0 0 rgba(161, 128, 114, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 0 8px rgba(161, 128, 114, 0.2);
+    }
+    100% {
+        box-shadow: 0 0 0 4px rgba(161, 128, 114, 0.1);
+    }
+}
+
+.category-btn:active,
+button:active {
+    transform: translateY(1px);
+    animation: buttonPress 0.1s ease-in-out;
+}
+
+@keyframes buttonPress {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(2px);
+    }
+    100% {
+        transform: translateY(1px);
+    }
+}
+
+.saved-note-item {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.save-pulse {
+    animation: savePulse 0.6s ease-in-out;
+}
+
+@keyframes savePulse {
+    0%, 100% {
+        background-color: rgb(120, 113, 108);
+    }
+    50% {
+        background-color: rgb(87, 99, 108);
+    }
+}
+
+.copy-success {
+    animation: copySuccess 0.4s ease-in-out;
+}
+
+@keyframes copySuccess {
+    0% {
+        background-color: rgb(120, 113, 108);
+        transform: scale(1);
+    }
+    50% {
+        background-color: rgb(34, 197, 94);
+        transform: scale(1.05);
+    }
+    100% {
+        background-color: rgb(120, 113, 108);
+        transform: scale(1);
+    }
+}
+
+.dark-mode {
+    background-color: #2d1810 !important;
+    color: #f5e4a3 !important;
+}
+
+.dark-mode .bg-beige-50 {
+    background-color: #2d1810 !important;
+}
+
+.dark-mode .bg-beige-100 {
+    background-color: #3d2318 !important;
+}
+
+.dark-mode .bg-beige-200 {
+    background-color: #4d2d20 !important;
+}
+
+.dark-mode .text-brown-900 {
+    color: #f5e4a3 !important;
+}
+
+.dark-mode .text-brown-800 {
+    color: #eed376 !important;
+}
+
+.dark-mode .text-brown-700 {
+    color: #e6c256 !important;
+}
+
+.dark-mode .border-brown-300 {
+    border-color: #5d3d28 !important;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    #mainTextarea {
+        height: 300px;
+    }
+}
+
+#savedNotesList::-webkit-scrollbar {
+    width: 6px;
+}
+
+#savedNotesList::-webkit-scrollbar-track {
+    background: #f2e8e5;
+}
+
+#savedNotesList::-webkit-scrollbar-thumb {
+    background: #a18072;
+    border-radius: 3px;
+}
+
+#savedNotesList::-webkit-scrollbar-thumb:hover {
+    background: #846358;
+}
+
+::selection {
+    background-color: rgba(161, 128, 114, 0.3);
+    color: #43302b;
+}
+
+.loading-spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
